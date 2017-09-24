@@ -54,11 +54,19 @@
 			children = (
 				49412C791F7763150059119A /* AppDelegate.swift */,
 				49412C7B1F7763150059119A /* ViewController.swift */,
+				49412C8B1F7764920059119A /* Browser */,
 				49412C801F7763150059119A /* Assets.xcassets */,
 				49412C821F7763150059119A /* LaunchScreen.storyboard */,
 				49412C851F7763150059119A /* Info.plist */,
 			);
 			path = PictureBrowser;
+			sourceTree = "<group>";
+		};
+		49412C8B1F7764920059119A /* Browser */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Browser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
