@@ -7,31 +7,66 @@
 //
 
 import UIKit
+import Kingfisher
+
+typealias dissmissBlock = ()->()
 
 class LQBrowserCollectionCell: UICollectionViewCell {
     
+    var dismissBlock : dissmissBlock?
+    
     var imageUrl : URL? {
         didSet{
-                
+            showImageView.kf.setImage(with: imageUrl) { (image, error, _, _) in
+                if error == nil{
+                    //计算图片要显示的高度
+                    let imageHeight = (image?.size.height)! * LQ_SCREEN_WIDTH / (image?.size.width)!
+                    //计算图片的偏移量
+                    let imageOffset = (LQ_SCREEN_HEIGHT - imageHeight) * 0.5
+                    
+                    self.showImageView.frame = CGRect(x: 0, y: 0, width: LQ_SCREEN_WIDTH, height: imageHeight)
+                    
+                    self.scrollView.contentInset = UIEdgeInsets(top: imageOffset, left: 0, bottom: imageOffset, right: 0)
+                    
+                    self.showImageView.image = image
+                    
+                }
+            }
         }
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        addSubViewAndLayot()
+        addSubViewAndLayout()
     }
 
     //MARK: - 内部控制方法
-    private func addSubViewAndLayot(){
+    ///添加子控制器
+    private func addSubViewAndLayout(){
         contentView.addSubview(scrollView)
         scrollView.addSubview(showImageView)
+        
+        //添加tap和longpress长按手势
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapHappend))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend))
+        showImageView.addGestureRecognizer(tap)
+        showImageView.addGestureRecognizer(longPress)
     }
     
+    ///布局子控件
     override func layoutSubviews() {
         super.layoutSubviews()
         scrollView.frame = bounds
-        showImageView.frame = scrollView.frame
+    }
+    
+    ///手势点击方法
+    @objc private func tapHappend(){
+        dismissBlock?()
+    }
+    
+    @objc private func longPressHappend(){
+        
     }
     
     //MARK: - 懒加载
@@ -45,15 +80,25 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         return scr
     }()
     
-    fileprivate lazy var showImageView = UIImageView()
+    fileprivate lazy var showImageView : UIImageView = {
+       let iv = UIImageView()
+        iv.isUserInteractionEnabled = true
+        return iv
+    }()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+//MARK: - UIScrollView 代理方法
 extension LQBrowserCollectionCell : UIScrollViewDelegate{
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return showImageView
     }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        
+    }
+    
 }

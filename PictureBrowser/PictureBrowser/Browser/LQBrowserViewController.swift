@@ -9,14 +9,18 @@
 
 import UIKit
 
-class LQBrowserViewController: UIViewController {
+//频幕宽
+let LQ_SCREEN_WIDTH : CGFloat = UIScreen.main.bounds.width
+//频幕高
+let LQ_SCREEN_HEIGHT : CGFloat = UIScreen.main.bounds.height
 
+class LQBrowserViewController: UIViewController {
     ///图片地址集合
     var urlsArray : [URL]
     ///图片对应的 index
-    var imageIndexPath : NSIndexPath
+    var imageIndexPath : IndexPath
     
-    init(_ urls : [URL] , _ indexPath : NSIndexPath){
+    init(_ urls : [URL] , _ indexPath : IndexPath){
         urlsArray = urls
         imageIndexPath = indexPath
         super.init(nibName: nil, bundle: nil)
@@ -46,7 +50,9 @@ class LQBrowserViewController: UIViewController {
        let collection = UICollectionView(frame: UIScreen.main.bounds, collectionViewLayout: flowLayout)
         collection.delegate = self
         collection.dataSource = self
+        collection.isPagingEnabled = true
         collection.register(LQBrowserCollectionCell.self, forCellWithReuseIdentifier: "\(LQBrowserCollectionCell.self)")
+        collection.backgroundColor = UIColor.white
         return collection
     }()
     ///自定义布局
@@ -82,6 +88,10 @@ extension LQBrowserViewController : UICollectionViewDelegate , UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(LQBrowserCollectionCell.self)", for: indexPath) as! LQBrowserCollectionCell
+        cell.imageUrl = urlsArray[indexPath.item]
+        cell.dismissBlock = { 
+            self.dismiss(animated: true, completion: nil)
+        }
         return cell
     }
 }

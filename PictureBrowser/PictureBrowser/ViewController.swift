@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 let width = (UIScreen.main.bounds.width - 20) / 3.0
 
@@ -48,12 +49,19 @@ class ViewController: UIViewController {
                    "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohmhaxrj20c80l675o.jpg",
                    "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohqgnixj20go08xmzk.jpg",
                    "http://wx3.sinaimg.cn/bmiddle/75b52ed2ly1fjvohs1o88j20j60ee42l.jpg"]
-        dataSource.append(contentsOf: arr)
+        
+        
+        
+        for i in 0..<arr.count{
+            let url = URL.init(string: arr[i])
+            dataSource.append(url!)
+        }
+        
         collectionView.reloadData()
     }
     
     ///数据源
-    private lazy var dataSource = Array<String>()
+    private lazy var dataSource = Array<URL>()
     ///collectionView
     private lazy var collectionView : UICollectionView = {
        let collect = UICollectionView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: width * 3 + 20), collectionViewLayout: FlowLayout())
@@ -70,14 +78,16 @@ extension ViewController : UICollectionViewDelegate,UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PictureCollectionCell.self)", for: indexPath) as! PictureCollectionCell
-        cell.imageName = dataSource[indexPath.item]
+        cell.imageView.kf.setImage(with: dataSource[indexPath.item])
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        let browserVC = LQBrowserViewController.init(dataSource, indexPath)
+        present(browserVC, animated: true, completion: nil)
     }
 }
 
@@ -88,19 +98,13 @@ class FlowLayout: UICollectionViewFlowLayout {
         itemSize = CGSize(width: width, height: width)
         minimumLineSpacing = 10
         minimumInteritemSpacing = 10
-        
     }
 }
 
 //MARK: - collectionViewCell
 class PictureCollectionCell: UICollectionViewCell {
     //图片名字
-    var imageName : String?{
-        didSet{
-            imageView.image = UIImage(named : imageName!)
-        }
-    }
-    
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(imageView)
@@ -116,6 +120,6 @@ class PictureCollectionCell: UICollectionViewCell {
         imageView.frame = contentView.bounds
     }
     
-    private lazy var imageView = UIImageView()
+    fileprivate lazy var imageView = UIImageView()
 }
 
