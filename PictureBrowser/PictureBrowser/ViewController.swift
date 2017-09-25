@@ -24,9 +24,31 @@ class ViewController: UIViewController {
     
     ///准备数据
     private func configData(){
-        for i in 1..<10{
-            dataSource.append(String(format:"%d.png",i))
-        }
+        
+        /**
+         ▿ 0 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrm8klvoj21kw11x1l2.jpg
+         ▿ 1 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmbpvk8j20zw23de81.jpg
+         ▿ 2 : http://wx1.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmk0c7jj21kw11xhdw.jpg
+         ▿ 3 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmmrboij21kw11x4qu.jpg
+         ▿ 4 : http://wx2.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmpb2o3j20zw0zwn05.jpg
+         ▿ 5 : http://wx4.sinaimg.cn/bmiddle/70be0b0cgy1fjvrn0h36fj21kw11x1l1.jpg
+         
+         ▿ 0 : http://wx2.sinaimg.cn/bmiddle/75b52ed2ly1fjvohk08w0j20hd0dnq4g.jpg
+         ▿ 1 : http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohmhaxrj20c80l675o.jpg
+         ▿ 2 : http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohqgnixj20go08xmzk.jpg
+         ▿ 3 : http://wx3.sinaimg.cn/bmiddle/75b52ed2ly1fjvohs1o88j20j60ee42l.jpg
+         ▿ 4 : http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohtknzgj20dw0ht77k.jpg
+         */
+        let arr = ["http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrm8klvoj21kw11x1l2.jpg",
+                   "http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmbpvk8j20zw23de81.jpg",
+                   "http://wx1.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmk0c7jj21kw11xhdw.jpg",
+                   "http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmmrboij21kw11x4qu.jpg",
+                   "http://wx2.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmpb2o3j20zw0zwn05.jpg",
+                   "http://wx4.sinaimg.cn/bmiddle/70be0b0cgy1fjvrn0h36fj21kw11x1l1.jpg",
+                   "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohmhaxrj20c80l675o.jpg",
+                   "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohqgnixj20go08xmzk.jpg",
+                   "http://wx3.sinaimg.cn/bmiddle/75b52ed2ly1fjvohs1o88j20j60ee42l.jpg"]
+        dataSource.append(contentsOf: arr)
         collectionView.reloadData()
     }
     
@@ -53,6 +75,10 @@ extension ViewController : UICollectionViewDelegate,UICollectionViewDataSource {
         cell.imageName = dataSource[indexPath.item]
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+    }
 }
 
 //MARK: - 自定义flowlayout
@@ -77,7 +103,6 @@ class PictureCollectionCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         contentView.addSubview(imageView)
     }
     
