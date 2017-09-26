@@ -44,7 +44,7 @@ class ViewController: UIViewController {
                    "http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmbpvk8j20zw23de81.jpg",
                    "http://wx1.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmk0c7jj21kw11xhdw.jpg",
                    "http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmmrboij21kw11x4qu.jpg",
-                   "http://wx2.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmpb2o3j20zw0zwn05.jpg",
+                   "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohtknzgj20dw0ht77k.jpg",
                    "http://wx4.sinaimg.cn/bmiddle/70be0b0cgy1fjvrn0h36fj21kw11x1l1.jpg",
                    "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohmhaxrj20c80l675o.jpg",
                    "http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohqgnixj20go08xmzk.jpg",
