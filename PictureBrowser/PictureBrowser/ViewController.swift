@@ -25,7 +25,6 @@ class ViewController: UIViewController {
     
     ///准备数据
     private func configData(){
-        
         /**
          ▿ 0 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrm8klvoj21kw11x1l2.jpg
          ▿ 1 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmbpvk8j20zw23de81.jpg
@@ -33,7 +32,6 @@ class ViewController: UIViewController {
          ▿ 3 : http://wx3.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmmrboij21kw11x4qu.jpg
          ▿ 4 : http://wx2.sinaimg.cn/bmiddle/70be0b0cgy1fjvrmpb2o3j20zw0zwn05.jpg
          ▿ 5 : http://wx4.sinaimg.cn/bmiddle/70be0b0cgy1fjvrn0h36fj21kw11x1l1.jpg
-         
          ▿ 0 : http://wx2.sinaimg.cn/bmiddle/75b52ed2ly1fjvohk08w0j20hd0dnq4g.jpg
          ▿ 1 : http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohmhaxrj20c80l675o.jpg
          ▿ 2 : http://wx4.sinaimg.cn/bmiddle/75b52ed2ly1fjvohqgnixj20go08xmzk.jpg
@@ -68,7 +66,7 @@ class ViewController: UIViewController {
         collect.delegate = self
         collect.dataSource = self
         collect.backgroundColor = UIColor.red
-        collect.register(PictureCollectionCell.self, forCellWithReuseIdentifier: "\(PictureCollectionCell.self)")
+        collect.register(LQCollectionViewCell.self, forCellWithReuseIdentifier: "\(LQCollectionViewCell.self)")
         return collect
     }()
 }
@@ -80,15 +78,59 @@ extension ViewController : UICollectionViewDelegate,UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PictureCollectionCell.self)", for: indexPath) as! PictureCollectionCell
-        cell.imageView.kf.setImage(with: dataSource[indexPath.item])
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(LQCollectionViewCell.self)", for: indexPath) as! LQCollectionViewCell
+        cell.imageUrl = dataSource[indexPath.item]
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let browserVC = LQBrowserViewController.init(dataSource, indexPath)
+        browserVC.presentManager.browserManager(indexPath, self)
         present(browserVC, animated: true, completion: nil)
     }
+}
+
+//MARK: - 自定义转场代理
+extension ViewController : LQBrowserManagerDelegate{
+    
+    func browserManagerCreateImageView(_ manager : LQBrowserManager ,_ imageIndex:IndexPath) -> UIImageView{
+        
+        let newImageView = UIImageView()
+        
+        let url = dataSource[imageIndex.item]
+        
+        let image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (url.absoluteString))
+        
+        newImageView.image = image
+        
+        return newImageView
+    }
+    
+    func browserManagerWillShow(_ manager : LQBrowserManager , _ imageIndex : IndexPath) -> CGRect{
+        
+        guard let cell = collectionView.cellForItem(at: imageIndex) as? LQCollectionViewCell else{
+            return .zero
+        }
+        
+        let rect = collectionView.convert(cell.frame, to: UIApplication.shared.keyWindow)
+        
+        return rect
+    }
+    
+    func browserManagerDidShow(_ manager: LQBrowserManager, _ imageIndex: IndexPath) -> CGRect {
+        
+        guard let image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (dataSource[imageIndex.item].absoluteString))else{
+            return .zero
+        }
+        
+        let imageHeight = image.size.height / image.size.width * LQ_SCREEN_WIDTH
+        
+        let offsetY = imageHeight > LQ_SCREEN_HEIGHT ? 0 : (LQ_SCREEN_HEIGHT - imageHeight) * 0.5
+        
+        
+        return CGRect(x: 0, y: offsetY, width: LQ_SCREEN_WIDTH, height: imageHeight)
+    }
+    
 }
 
 //MARK: - 自定义flowlayout
@@ -101,25 +143,4 @@ class FlowLayout: UICollectionViewFlowLayout {
     }
 }
 
-//MARK: - collectionViewCell
-class PictureCollectionCell: UICollectionViewCell {
-    //图片名字
-  
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        contentView.addSubview(imageView)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    //布局子控件
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageView.frame = contentView.bounds
-    }
-    
-    fileprivate lazy var imageView = UIImageView()
-}
 

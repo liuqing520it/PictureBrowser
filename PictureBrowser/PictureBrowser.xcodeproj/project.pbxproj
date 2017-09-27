@@ -15,6 +15,7 @@
 		49412C8D1F789E6C0059119A /* LQBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49412C8C1F789E6C0059119A /* LQBrowserViewController.swift */; };
 		49412C8F1F78A6240059119A /* LQBrowserCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49412C8E1F78A6240059119A /* LQBrowserCollectionCell.swift */; };
 		49412C911F78A6E40059119A /* LQBrowserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49412C901F78A6E40059119A /* LQBrowserManager.swift */; };
+		49412C9E1F7A991D0059119A /* LQCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49412C9D1F7A991D0059119A /* LQCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		49412C8C1F789E6C0059119A /* LQBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQBrowserViewController.swift; sourceTree = "<group>"; };
 		49412C8E1F78A6240059119A /* LQBrowserCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQBrowserCollectionCell.swift; sourceTree = "<group>"; };
 		49412C901F78A6E40059119A /* LQBrowserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQBrowserManager.swift; sourceTree = "<group>"; };
+		49412C9D1F7A991D0059119A /* LQCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LQCollectionViewCell.swift; sourceTree = "<group>"; };
 		77422CB0CE7250B56AC0BBB8 /* Pods_PictureBrowser.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PictureBrowser.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B18C47D041733A6B105E3DDF /* Pods-PictureBrowser.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PictureBrowser.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PictureBrowser/Pods-PictureBrowser.debug.xcconfig"; sourceTree = "<group>"; };
 		D9E21B3FFB20097135FCF944 /* Pods-PictureBrowser.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PictureBrowser.release.xcconfig"; path = "Pods/Target Support Files/Pods-PictureBrowser/Pods-PictureBrowser.release.xcconfig"; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 			children = (
 				49412C791F7763150059119A /* AppDelegate.swift */,
 				49412C7B1F7763150059119A /* ViewController.swift */,
+				49412C9D1F7A991D0059119A /* LQCollectionViewCell.swift */,
 				49412C8B1F7764920059119A /* Browser */,
 				49412C801F7763150059119A /* Assets.xcassets */,
 				49412C821F7763150059119A /* LaunchScreen.storyboard */,
@@ -226,6 +229,7 @@
 			files = (
 				49412C8D1F789E6C0059119A /* LQBrowserViewController.swift in Sources */,
 				49412C8F1F78A6240059119A /* LQBrowserCollectionCell.swift in Sources */,
+				49412C9E1F7A991D0059119A /* LQCollectionViewCell.swift in Sources */,
 				49412C911F78A6E40059119A /* LQBrowserManager.swift in Sources */,
 				49412C7C1F7763150059119A /* ViewController.swift in Sources */,
 				49412C7A1F7763150059119A /* AppDelegate.swift in Sources */,

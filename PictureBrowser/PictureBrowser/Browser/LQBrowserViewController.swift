@@ -20,11 +20,17 @@ class LQBrowserViewController: UIViewController {
     ///图片对应的 index
     var imageIndexPath : IndexPath
     
+    ///自定义转场代理
+    var presentManager = LQBrowserManager()
     //重写init方法
     init(_ urls : [URL] , _ indexPath : IndexPath){
         urlsArray = urls
         imageIndexPath = indexPath
         super.init(nibName: nil, bundle: nil)
+        //设置转场模式为自定义 自己管理弹出和消失
+        modalPresentationStyle = .custom
+        //设置自定义转场代理
+        transitioningDelegate = presentManager
         
         addSubViewAndlayout()
         

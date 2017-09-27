@@ -88,7 +88,7 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     @objc private func tapHappend(){
         delegate?.browserDismiss(self)
     }
-    
+
     ///长按手势
     @objc private func longPressHappend(){
         
