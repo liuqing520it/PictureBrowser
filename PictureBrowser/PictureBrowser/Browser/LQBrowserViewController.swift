@@ -100,6 +100,7 @@ class LQBrowserViewController: UIViewController {
         page.hidesForSinglePage = true
         page.currentPageIndicatorTintColor = UIColor.white
         page.pageIndicatorTintColor = UIColor.init(white: 0.6, alpha: 0.6)
+        page.isUserInteractionEnabled = false
         return page
     }()
     

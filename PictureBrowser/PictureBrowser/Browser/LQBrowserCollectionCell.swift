@@ -59,24 +59,26 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViewAndLayout()
+        
+        //添加tap和longpress长按手势
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapHappend))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend))
+        contentView.addGestureRecognizer(tap)
+        contentView.addGestureRecognizer(longPress)
+        
     }
 
     //MARK: - 内部控制方法
     ///添加子控制器
     private func addSubViewAndLayout(){
         contentView.addSubview(scrollView)
+        
         scrollView.addSubview(showImageView)
         
-        //添加tap和longpress长按手势
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapHappend))
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend(tapView:)))
-        showImageView.addGestureRecognizer(tap)
-        showImageView.addGestureRecognizer(longPress)
-        
         contentView.addSubview(activity)
-        activity.center = contentView.center
         
-        print(contentView.center)
+        activity.center = contentView.center
+
     }
     
     ///清空一些设置 避免复用问题
@@ -94,11 +96,11 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     }
 
     ///长按手势
-    @objc private func longPressHappend(tapView : UITapGestureRecognizer){
-        guard let imageView = tapView.view as? UIImageView  else {
+    @objc private func longPressHappend(){
+        guard let image = showImageView.image else {
             return
         }
-        delegate?.browserAction(self, imageView.image!)
+        delegate?.browserAction(self,image)
     }
     
     //MARK: - 懒加载
@@ -113,11 +115,7 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         return scr
     }()
     
-    lazy var showImageView : UIImageView = {
-       let iv = UIImageView()
-        iv.isUserInteractionEnabled = true
-        return iv
-    }()
+    lazy var showImageView = UIImageView()
     
     private lazy var activity = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
