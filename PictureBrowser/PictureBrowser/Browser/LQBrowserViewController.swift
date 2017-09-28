@@ -8,6 +8,7 @@
 //层次结构 : 控制器上放collectionView,cell上放scrollView,scrollView上放一张图片,图片可实现放大缩小
 
 import UIKit
+import Kingfisher
 import Photos
 //频幕宽
 let LQ_SCREEN_WIDTH : CGFloat = UIScreen.main.bounds.width
@@ -49,11 +50,22 @@ class LQBrowserViewController: UIViewController {
         pageControl.currentPage = imageIndexPath.item
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        collectionView.scrollToItem(at: imageIndexPath, at: .left, animated: false)
-//    }
-//
+    
+    //MARK: - 外部控制方法
+    func createImageView(_ imageIndex : IndexPath) -> UIImageView?{
+        
+        let newImageView = UIImageView()
+        
+        guard let cell = collectionView.visibleCells.last as? LQBrowserCollectionCell else{
+            return nil
+        }
+        newImageView.image = cell.showImageView.image
+        
+        newImageView.frame = CGRect(x: 0, y: abs(cell.scrollView.contentOffset.y), width: cell.showImageView.frame.size.width, height: cell.showImageView.frame.size.height)
+        
+        return newImageView
+    }
+    
     //MARK: - 内部控制方法
     private func addSubViewAndlayout(){
         view.addSubview(collectionView)
@@ -110,7 +122,9 @@ extension LQBrowserViewController : UICollectionViewDelegate , UICollectionViewD
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        pageControl.currentPage = Int(scrollView.contentOffset.x / LQ_SCREEN_WIDTH)
+        let itemIndex = Int(scrollView.contentOffset.x / LQ_SCREEN_WIDTH)
+        pageControl.currentPage = itemIndex
+        imageIndexPath = IndexPath(item: itemIndex, section: 0)
     }
 }
 

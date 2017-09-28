@@ -13,6 +13,7 @@
 //5. 动画执行完之后需要移除UIImageView 并且将浏览器添加到转场的containerView上
 
 import UIKit
+import Kingfisher
 
 protocol LQBrowserManagerDelegate : NSObjectProtocol {
     ///创建ImageView
@@ -27,19 +28,19 @@ class LQBrowserManager: NSObject , UIViewControllerTransitioningDelegate{
 
     ///记录是弹出还是消失
     fileprivate var isPresent : Bool = false
-    
     ///图片对应的索引
-    var imageIndexPath : IndexPath = []
+    fileprivate var imageIndexPath : IndexPath = []
     //代理 用来传值
-    weak var delegate : LQBrowserManagerDelegate?
+    fileprivate weak var delegate : LQBrowserManagerDelegate?
     
     ///设置图片索引 和 代理
-
     func browserManager(_ indexPath: IndexPath ,_ delegate : LQBrowserManagerDelegate){
         imageIndexPath = indexPath
         self.delegate = delegate
     }
     
+    //MARK: - UIViewControllerTransitioningDelegate
+    //下面两个方法 设置 UIViewControllerAnimatedTransitioning的代理
     func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning?{
         isPresent = true
         return self
@@ -49,6 +50,22 @@ class LQBrowserManager: NSObject , UIViewControllerTransitioningDelegate{
         isPresent = false
         return self
     }
+    
+    ///计算图片的最终展示大小
+    func calculateDidShowImageFrame(_ cacheUrl : URL) -> CGRect{
+        
+        guard let image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (cacheUrl.absoluteString))else{
+            return .zero
+        }
+        
+        let imageHeight = image.size.height / image.size.width * LQ_SCREEN_WIDTH
+        
+        let offsetY = imageHeight > LQ_SCREEN_HEIGHT ? 0 : (LQ_SCREEN_HEIGHT - imageHeight) * 0.5
+        
+        return CGRect(x: 0, y: offsetY, width: LQ_SCREEN_WIDTH, height: imageHeight)
+    }
+    
+    
 }
 
 //MARK: - <UIViewControllerAnimatedTransitioning>
@@ -63,9 +80,15 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning){
         
         if isPresent{//弹出
+            ///设置容器视图的背景颜色为黑色
+            transitionContext.containerView.backgroundColor = UIColor.black
+            
             willPresentedController(transitionContext)
         }
         else{//消失
+            ///设置容器视图的背景颜色为透明
+            transitionContext.containerView.backgroundColor = UIColor.clear
+            
             willDismissedController(transitionContext)
         }
     }
@@ -74,7 +97,7 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
      private func willPresentedController(_ transitionContext: UIViewControllerContextTransitioning){
         
         //获取弹出视图的view
-        guard let toView = transitionContext.view(forKey: UITransitionContextViewKey.to)else{
+        guard let toView = transitionContext.view(forKey:.to)else{
             return
         }
         
@@ -96,7 +119,7 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
         guard let resultFrame = delegate?.browserManagerDidShow(self, imageIndexPath) else{
             return
         }
-        //4.执行动画
+        //4.执行动画 让图片逐渐放大
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             maskImageView.frame = resultFrame
         }) { (_) in
@@ -111,12 +134,29 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
     
     ///消失
     private func willDismissedController(_ transitionContext: UIViewControllerContextTransitioning){
-//        guard let formView = transitionContext.view(forKey: UITransitionContextViewKey.from)else{
-//            return
-//        }
-//        
-//        transitionContext.containerView.addSubview(formView)
+        guard let formVC = transitionContext.viewController(forKey: .from) as? LQBrowserViewController else{
+            return
+        }
         
-        transitionContext.completeTransition(true)
+        formVC.view.removeFromSuperview()
+        //1. 新建一个imagView 图片的frame 刚好覆盖当前展示的图片
+        guard let maskImageView = formVC.createImageView(formVC.imageIndexPath)else{
+            return
+        }
+        transitionContext.containerView.addSubview(maskImageView)
+        
+        //2. 找到这张图片 在collectionView 对应的坐标
+        guard let scaleFrame = delegate?.browserManagerWillShow(self, formVC.imageIndexPath)else{
+            return
+        }
+        //3. 执行动画 让图片逐渐缩小
+        UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
+            maskImageView.frame = scaleFrame
+            
+        }) { (_) in
+            maskImageView.removeFromSuperview()
+            
+            transitionContext.completeTransition(true)
+        }
     }
 }

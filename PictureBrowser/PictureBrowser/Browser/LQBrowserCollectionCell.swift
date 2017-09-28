@@ -99,7 +99,7 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     }
     
     //MARK: - 懒加载
-    private lazy var scrollView : UIScrollView = {
+    lazy var scrollView : UIScrollView = {
        let scr = UIScrollView(frame: UIScreen.main.bounds)
         scr.showsVerticalScrollIndicator = false
         scr.showsHorizontalScrollIndicator = false
@@ -110,7 +110,7 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         return scr
     }()
     
-    fileprivate lazy var showImageView : UIImageView = {
+    lazy var showImageView : UIImageView = {
        let iv = UIImageView()
         iv.isUserInteractionEnabled = true
         return iv

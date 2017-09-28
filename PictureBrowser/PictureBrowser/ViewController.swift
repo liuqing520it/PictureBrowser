@@ -97,11 +97,7 @@ extension ViewController : LQBrowserManagerDelegate{
         
         let newImageView = UIImageView()
         
-        let url = dataSource[imageIndex.item]
-        
-        let image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (url.absoluteString))
-        
-        newImageView.image = image
+        newImageView.image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (dataSource[imageIndex.item].absoluteString))
         
         return newImageView
     }
@@ -119,16 +115,7 @@ extension ViewController : LQBrowserManagerDelegate{
     
     func browserManagerDidShow(_ manager: LQBrowserManager, _ imageIndex: IndexPath) -> CGRect {
         
-        guard let image = KingfisherManager.shared.cache.retrieveImageInDiskCache(forKey: (dataSource[imageIndex.item].absoluteString))else{
-            return .zero
-        }
-        
-        let imageHeight = image.size.height / image.size.width * LQ_SCREEN_WIDTH
-        
-        let offsetY = imageHeight > LQ_SCREEN_HEIGHT ? 0 : (LQ_SCREEN_HEIGHT - imageHeight) * 0.5
-        
-        
-        return CGRect(x: 0, y: offsetY, width: LQ_SCREEN_WIDTH, height: imageHeight)
+        return manager.calculateDidShowImageFrame(dataSource[imageIndex.item])
     }
     
 }
