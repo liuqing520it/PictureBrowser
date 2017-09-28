@@ -7,7 +7,7 @@
 //
 // 点击一张图片从那张图片慢慢放大弹出, 实现原理: 自定义转场后有一个空的view盖在了window上 视图需要手动添加
 //1. 首先创建一个UIImageView, 加在转场containerView上 ; 创建应该由展示视图创建,可以拿到它要展示的image
-//2. 获取UIImageView相对于window的左边  坐标转换
+//2. 获取UIImageView相对于window的坐标  坐标转换
 //3. 算出UIImageView最终展示的frame
 //4. 设置动画让UIimageView放大
 //5. 动画执行完之后需要移除UIImageView 并且将浏览器添加到转场的containerView上
