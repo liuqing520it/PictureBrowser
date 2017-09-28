@@ -10,9 +10,9 @@ import UIKit
 import Kingfisher
 
 protocol LQBrowserCollectionCellDelegate : NSObjectProtocol {
-    
+    ///点按图片 控制器dismiss
     func browserDismiss(_ browser: LQBrowserCollectionCell)
-    
+    ///长按图片显示操作菜单
     func browserAction(_ browser : LQBrowserCollectionCell ,_ saveImage : UIImage)
 }
 
@@ -20,11 +20,14 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     
     var imageUrl : URL? {
         didSet{
-            
+            ///菊花开始动画展示 加载进度
+            activity.startAnimating()
+            ///清除scrollView的一些设置 避免复用引起图片显示异常
             resetScrollViewSomeSet()
-            
+            ///加载图片
             showImageView.kf.setImage(with: imageUrl) { (image, error, _, _) in
                 if error == nil{
+                   
                     //计算图片要显示的高度
                     let imageHeight = (image?.size.height)! * LQ_SCREEN_WIDTH / (image?.size.width)!
                    
@@ -42,6 +45,8 @@ class LQBrowserCollectionCell: UICollectionViewCell {
                     }
                     self.showImageView.image = image
                     
+                    ///图片完全展示了 停止转菊花
+                    self.activity.stopAnimating()
                 }
             }
         }
@@ -53,7 +58,6 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     ///初始化方法
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         addSubViewAndLayout()
     }
 
@@ -65,17 +69,17 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         
         //添加tap和longpress长按手势
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapHappend))
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend(tapView:)))
         showImageView.addGestureRecognizer(tap)
         showImageView.addGestureRecognizer(longPress)
+        
+        contentView.addSubview(activity)
+        activity.center = contentView.center
+        
+        print(contentView.center)
     }
     
-    ///布局子控件
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        scrollView.frame = bounds
-    }
-    
+    ///清空一些设置 避免复用问题
     private func resetScrollViewSomeSet(){
         scrollView.contentInset = .zero
         scrollView.contentSize = .zero
@@ -90,12 +94,11 @@ class LQBrowserCollectionCell: UICollectionViewCell {
     }
 
     ///长按手势
-    @objc private func longPressHappend(){
-        
-        guard let image = showImageView.image else {
+    @objc private func longPressHappend(tapView : UITapGestureRecognizer){
+        guard let imageView = tapView.view as? UIImageView  else {
             return
         }
-        delegate?.browserAction(self, image)
+        delegate?.browserAction(self, imageView.image!)
     }
     
     //MARK: - 懒加载
@@ -115,6 +118,8 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         iv.isUserInteractionEnabled = true
         return iv
     }()
+    
+    private lazy var activity = UIActivityIndicatorView(activityIndicatorStyle: .white)
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
