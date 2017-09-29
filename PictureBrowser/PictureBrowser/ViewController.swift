@@ -97,7 +97,6 @@ extension ViewController : LQBrowserManagerDelegate{
     }
     
     func browserManagerDidShow(_ manager: LQBrowserManager, _ imageIndex: IndexPath) -> CGRect {
-        
         return manager.calculateDidShowImageFrame(dataSource[imageIndex.item])
     }
     

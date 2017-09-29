@@ -20,7 +20,6 @@ class LQBrowserViewController: UIViewController {
     var urlsArray : [URL]
     ///图片对应的 index
     var imageIndexPath : IndexPath
-    
     ///自定义转场代理
     var presentManager = LQBrowserManager()
     //重写init方法

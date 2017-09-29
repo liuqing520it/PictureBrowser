@@ -44,7 +44,6 @@ class LQBrowserCollectionCell: UICollectionViewCell {
                         self.scrollView.contentSize = CGSize(width: LQ_SCREEN_WIDTH, height: imageHeight)
                     }
                     self.showImageView.image = image
-                    
                     ///图片完全展示了 停止转菊花
                     self.activity.stopAnimating()
                 }

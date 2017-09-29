@@ -24,8 +24,6 @@ class LQCollectionViewCell : UICollectionViewCell {
     }
     
     //布局子控件
- 
-    
     lazy var imageView = UIImageView()
     
     required init?(coder aDecoder: NSCoder) {
