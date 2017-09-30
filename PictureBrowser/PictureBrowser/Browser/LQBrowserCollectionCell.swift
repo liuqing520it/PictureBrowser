@@ -59,6 +59,10 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         super.init(frame: frame)
         addSubViewAndLayout()
         
+        if #available(iOS 11, *) {
+            scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentBehavior.never
+        }
+        
         //添加tap和longpress长按手势
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapHappend))
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressHappend))
@@ -79,13 +83,7 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         
         activity.center = contentView.center
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        print(scrollView.contentInset)
-        print(showImageView.frame)
-    }
-    
+
     ///清空一些设置 避免复用问题
     private func resetScrollViewSomeSet(){
         scrollView.contentInset = .zero

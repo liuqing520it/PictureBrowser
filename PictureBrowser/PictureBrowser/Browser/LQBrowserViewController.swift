@@ -39,6 +39,7 @@ class LQBrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         addSubViewAndlayout()
     }
     
