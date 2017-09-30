@@ -32,7 +32,6 @@ class LQBrowserViewController: UIViewController {
         //设置自定义转场代理
         transitioningDelegate = presentManager
         
-        addSubViewAndlayout()
         
         pageControl.numberOfPages = urls.count
     }
@@ -40,16 +39,24 @@ class LQBrowserViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        addSubViewAndlayout()
     }
+    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        //当选择的图片不是第一张时 collectionView需要滚动到对应的图片位置
         collectionView.scrollToItem(at: imageIndexPath, at: .left, animated: false)
-        
+        //pageControl 也需要展示对应的位置
         pageControl.currentPage = imageIndexPath.item
     }
     
-    
+    ///隐藏 状态栏
+    override var prefersStatusBarHidden: Bool{
+        return true
+    }
+
     //MARK: - 外部控制方法
     func createImageView(_ imageIndex : IndexPath) -> UIImageView?{
         

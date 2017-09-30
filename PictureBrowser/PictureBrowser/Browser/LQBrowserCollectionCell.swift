@@ -73,11 +73,17 @@ class LQBrowserCollectionCell: UICollectionViewCell {
         contentView.addSubview(scrollView)
         
         scrollView.addSubview(showImageView)
+        showImageView.frame = scrollView.bounds
         
         contentView.addSubview(activity)
         
         activity.center = contentView.center
-
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print(scrollView.contentInset)
+        print(showImageView.frame)
     }
     
     ///清空一些设置 避免复用问题

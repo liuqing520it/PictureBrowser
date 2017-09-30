@@ -78,7 +78,6 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
     
     //管理弹出和消失
     public func animateTransition(using transitionContext: UIViewControllerContextTransitioning){
-        
         if isPresent{//弹出
             ///设置容器视图的背景颜色为黑色
             transitionContext.containerView.backgroundColor = UIColor.black
@@ -152,10 +151,9 @@ extension LQBrowserManager : UIViewControllerAnimatedTransitioning{
         //3. 执行动画 让图片逐渐缩小
         UIView.animate(withDuration: transitionDuration(using: transitionContext), animations: {
             maskImageView.frame = scaleFrame
-            
         }) { (_) in
             maskImageView.removeFromSuperview()
-            
+            //动画执行完毕
             transitionContext.completeTransition(true)
         }
     }
